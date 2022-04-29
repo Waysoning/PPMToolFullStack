@@ -9,9 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -38,5 +36,11 @@ public class ProjectController {
 
         Project project1 = projectService.saveOrUpdateProject(project);
         return new ResponseEntity<>(project, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{projectIdentifier}")
+    public ResponseEntity<?> getProjectByIdentifier(@PathVariable String projectIdentifier) {
+        Project project = projectService.findProjectByIdentifier(projectIdentifier);
+        return new ResponseEntity<>(project, HttpStatus.OK);
     }
 }
