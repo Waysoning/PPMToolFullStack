@@ -43,4 +43,10 @@ public class ProjectController {
         Project project = projectService.findProjectByIdentifier(projectIdentifier);
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
+
+    @GetMapping("/all")
+    @ResponseBody // Use this annotation to avoid 404 error
+    public Iterable<Project> getAllProjects() {
+        return projectService.findAllProjects();
+    }
 }
