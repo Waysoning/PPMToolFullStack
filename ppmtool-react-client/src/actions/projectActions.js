@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { GET_ERRORS } from './types';
 
-export const createProject = (projectData, history) => async (dispatch) => {
+export const createProject = (projectData) => async (dispatch) => {
   try {
-    await axios.post('/api/projects', projectData);
-    history.push('/dashboard');
+    await axios.post('http://localhost:8080/api/project', projectData);
+    window.location.href = '/dashboard';
   } catch (err) {
     dispatch({
       type: GET_ERRORS,
