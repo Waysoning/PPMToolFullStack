@@ -45,16 +45,22 @@ export const getProject = (id, history) => async (dispatch) => {
 };
 
 export const deleteProject = (id) => async (dispatch) => {
-  try {
-    await axios.delete(`/api/project/${id}`);
-    dispatch({
-      type: DELETE_PROJECT,
-      payload: id,
-    });
-  } catch (err) {
-    dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data,
-    });
+  if (
+    window.confirm(
+      'Are you sure? This will delete the project and all the data related to it!'
+    )
+  ) {
+    try {
+      await axios.delete(`/api/project/${id}`);
+      dispatch({
+        type: DELETE_PROJECT,
+        payload: id,
+      });
+    } catch (err) {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+    }
   }
 };
