@@ -7,9 +7,8 @@ import classnames from 'classnames';
 class UpdateProject extends Component {
   // lifecycle method
   componentDidMount() {
-    // const { id } = this.props.match.param;
-    console.log(this.props);
-    this.props.getProject('QWER');
+    const { id } = this.props.match.params;
+    this.props.getProject(id);
   }
 
   render() {
