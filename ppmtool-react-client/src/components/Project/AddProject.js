@@ -42,7 +42,7 @@ class AddProject extends Component {
       endDate: this.state.endDate,
     };
     console.log(newProject);
-    this.props.createProject(newProject);
+    this.props.createProject(newProject, this.props.history);
   };
 
   render() {
@@ -100,10 +100,12 @@ class AddProject extends Component {
                       value={this.state.description}
                       onChange={this.onChange}
                     ></textarea>
+                    {errors.description && (
+                      <div className="invalid-feedback">
+                        {errors.description}
+                      </div>
+                    )}
                   </div>
-                  {errors.description && (
-                    <div className="invalid-feedback">{errors.description}</div>
-                  )}
                   <h6>Start Date</h6>
                   <div className="form-group">
                     <input
