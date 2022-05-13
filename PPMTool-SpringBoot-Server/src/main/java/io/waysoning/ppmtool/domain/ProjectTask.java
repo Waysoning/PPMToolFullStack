@@ -28,16 +28,6 @@ public class ProjectTask {
     private Date createdAt;
     private Date updatedAt;
 
-    @PrePersist
-    protected void onCreate(){
-        this.createdAt = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate(){
-        this.updatedAt = new Date();
-    }
-
     public ProjectTask() {
     }
 
@@ -135,5 +125,15 @@ public class ProjectTask {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = new Date();
     }
 }
