@@ -1,6 +1,7 @@
 package io.waysoning.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -37,15 +38,9 @@ public class Project {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updateDate;
 
-    @PrePersist
-    protected void onCreate() {
-        creteDate = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updateDate = new Date();
-    }
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    @JsonIgnore
+    private Backlog backlog;
 
     public Project() {
     }
@@ -114,5 +109,22 @@ public class Project {
         this.updateDate = updateDate;
     }
 
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        creteDate = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateDate = new Date();
+    }
 
 }
