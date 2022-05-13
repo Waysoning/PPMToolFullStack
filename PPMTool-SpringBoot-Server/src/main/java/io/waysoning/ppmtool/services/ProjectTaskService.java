@@ -90,4 +90,11 @@ public class ProjectTaskService {
 
         return projectTaskRepository.save(updatedTask);
     }
+
+    public void deleteProjectTaskByProjectSequence(String backlogId, String projectSequence) {
+
+        ProjectTask projectTask = findProjectTaskByProjectSequence(backlogId, projectSequence);
+
+        projectTaskRepository.delete(projectTask);
+    }
 }
