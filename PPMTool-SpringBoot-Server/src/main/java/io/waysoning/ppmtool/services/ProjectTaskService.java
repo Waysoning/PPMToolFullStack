@@ -82,4 +82,12 @@ public class ProjectTaskService {
 
         return projectTask;
     }
+
+    public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlogId, String projectSequence) {
+
+        // validate project
+        findProjectTaskByProjectSequence(backlogId, projectSequence);
+
+        return projectTaskRepository.save(updatedTask);
+    }
 }
