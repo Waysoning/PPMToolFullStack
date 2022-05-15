@@ -1,15 +1,19 @@
 import axios from 'axios';
+import { GET_ERRORS } from './types';
 
 export const addProjectTask =
   (backlog_id, project_task, history) => async (dispatch) => {
     try {
-      const res = await axios.post(`/api/backlog/${backlog_id}`, project_task);
+      await axios.post(`/api/backlog/${backlog_id}`, project_task);
+      history.push(`/api/backlog/${backlog_id}`);
       dispatch({
-        type: 'ADD_PROJECT_TASK',
-        payload: res.data,
+        type: GET_ERRORS,
+        payload: {},
       });
-      history.push(`/projectBoard/${backlog_id}`);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
     }
   };
