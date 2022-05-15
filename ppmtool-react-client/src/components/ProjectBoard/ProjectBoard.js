@@ -9,11 +9,13 @@ class ProjectBoard extends Component {
   // constructor to hanle the errors
 
   componentDidMount() {
-    this.props.getBacklog(this.props.match.params.id);
+    const { id } = this.props.match.params;
+    this.props.getBacklog(id);
   }
 
   render() {
     const { id } = this.props.match.params;
+    const { project_tasks } = this.props.backlog;
     return (
       <div className="container">
         <Link to={`/addProjectTask/${id}`} className="btn btn-primary mb-3">
@@ -21,7 +23,7 @@ class ProjectBoard extends Component {
         </Link>
         <br />
         <hr />
-        <Backlog />
+        <Backlog project_tasks={project_tasks} />
       </div>
     );
   }
@@ -33,7 +35,7 @@ ProjectBoard.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  backlog: state.backlog.backlog,
+  backlog: state.backlog,
 });
 
 export default connect(mapStateToProps, { getBacklog })(ProjectBoard);
