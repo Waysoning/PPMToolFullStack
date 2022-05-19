@@ -1,6 +1,7 @@
 package io.waysoning.ppmtool.services;
 
 import io.waysoning.ppmtool.domain.User;
+import io.waysoning.ppmtool.exceptions.UsernameAlreadyExistsException;
 import io.waysoning.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,7 +17,15 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User saveUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        try {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            // Username is unique
+            user.setUsername(user.getUsername());
+
+
+            return userRepository.save(user);
+        } catch (Exception e) {
+            throw new UsernameAlreadyExistsException("Username '" + user.getUsername() + "' already exists");
+        }
     }
 }
