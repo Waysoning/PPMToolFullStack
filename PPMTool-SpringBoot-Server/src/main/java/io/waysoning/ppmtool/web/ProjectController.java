@@ -36,8 +36,10 @@ public class ProjectController {
         }
 
         Project project1 = projectService.saveOrUpdateProject(project);
-        return new ResponseEntity<>(project, HttpStatus.CREATED);
+//        return new ResponseEntity<>(project, HttpStatus.CREATED);
+        return ResponseEntity.ok(project1);
     }
+
 
     @GetMapping("/{projectIdentifier}")
     public ResponseEntity<?> getProjectByIdentifier(@PathVariable String projectIdentifier) {
