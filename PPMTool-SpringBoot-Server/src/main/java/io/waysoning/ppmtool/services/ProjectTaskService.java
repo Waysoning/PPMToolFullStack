@@ -27,13 +27,16 @@ public class ProjectTaskService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public ProjectTask addProjectTask(String projectIdentifier ,ProjectTask projectTask) {
+    @Autowired
+    private ProjectService projectService;
 
-        try{
+    public ProjectTask addProjectTask(String projectIdentifier ,ProjectTask projectTask, String username) {
+
 
             // PTs to be added to a specific project, project != null, Backlog exists
             // set the BL to the project
-            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+            // Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+            Backlog backlog = projectService.findProjectByIdentifier(projectIdentifier, username).getBacklog();
             projectTask.setBacklog(backlog);
             backlog.setPTSequence(backlog.getPTSequence() + 1);
             projectTask.setProjectSequence(projectIdentifier+"-"+backlog.getPTSequence());
@@ -48,18 +51,13 @@ public class ProjectTaskService {
             }
 
             return projectTaskRepository.save(projectTask);
-        } catch (Exception e) {
-            throw new ProjectNotFoundException("Project ID '" + projectIdentifier + "' not found");
-        }
+
 
     }
 
-    public Iterable<ProjectTask> findBacklogById(String backlogId) {
+    public Iterable<ProjectTask> findBacklogById(String backlogId, String username) {
 
-        Project project = projectRepository.findByProjectIdentifier(backlogId);
-        if(project == null) {
-            throw new ProjectNotFoundException("Project ID '" + backlogId + "' not found");
-        }
+        projectService.findProjectByIdentifier(backlogId, username);
 
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(backlogId);
     }
