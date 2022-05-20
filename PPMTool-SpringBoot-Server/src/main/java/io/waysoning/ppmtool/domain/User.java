@@ -30,6 +30,9 @@ public class User implements UserDetails {
     private Date updateAt;
 
     // OneToMany with Project
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private Collection<Project> projects;
 
     public User() {
     }
@@ -90,6 +93,14 @@ public class User implements UserDetails {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Collection<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Collection<Project> projects) {
+        this.projects = projects;
     }
 
     @PrePersist

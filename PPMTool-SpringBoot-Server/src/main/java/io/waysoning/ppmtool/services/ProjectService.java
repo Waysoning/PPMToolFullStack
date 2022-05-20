@@ -2,9 +2,11 @@ package io.waysoning.ppmtool.services;
 
 import io.waysoning.ppmtool.domain.Backlog;
 import io.waysoning.ppmtool.domain.Project;
+import io.waysoning.ppmtool.domain.User;
 import io.waysoning.ppmtool.exceptions.ProjectIdException;
 import io.waysoning.ppmtool.repositories.BacklogRepository;
 import io.waysoning.ppmtool.repositories.ProjectRepository;
+import io.waysoning.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +21,17 @@ public class ProjectService {
     @Autowired
     private BacklogRepository backlogRepository;
 
-    public Project saveOrUpdateProject(Project project){
+    @Autowired
+    private UserRepository userRepository;
+
+    public Project saveOrUpdateProject(Project project, String username) {
         // logic to save or update project
         try{
+            User user = userRepository.findByUsername(username);
+            project.setUser(user);
+            project.setProjectLeader(user.getUsername());
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+
             // when new project
             if(project.getId() == null){
                 Backlog backlog = new Backlog();
