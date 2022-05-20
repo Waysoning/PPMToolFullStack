@@ -4,6 +4,7 @@ import io.waysoning.ppmtool.domain.Backlog;
 import io.waysoning.ppmtool.domain.Project;
 import io.waysoning.ppmtool.domain.User;
 import io.waysoning.ppmtool.exceptions.ProjectIdException;
+import io.waysoning.ppmtool.exceptions.ProjectNotFoundException;
 import io.waysoning.ppmtool.repositories.BacklogRepository;
 import io.waysoning.ppmtool.repositories.ProjectRepository;
 import io.waysoning.ppmtool.repositories.UserRepository;
@@ -48,23 +49,24 @@ public class ProjectService {
         }
     }
 
-    public Project findProjectByIdentifier(String projectIdentifier){
+    public Project findProjectByIdentifier(String projectIdentifier, String username){
         Project project = projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
         if(project == null){
             throw new ProjectIdException("Project ID '" + projectIdentifier + "' does not exist");
         }
+
+        if(!project.getProjectLeader().equals(username)){
+            throw new ProjectNotFoundException("Project not found in your account");
+        }
+
         return project;
     }
 
-    public Iterable<Project> findAllProjects(){
-        return projectRepository.findAll();
+    public Iterable<Project> findAllProjects(String username){
+        return projectRepository.findAllByProjectLeader(username);
     }
 
-    public void deleteProjectByIdentifier(String projectIdentifier){
-        Project project = projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
-        if(project == null){
-            throw new ProjectIdException("Project ID '" + projectIdentifier + "' does not exist");
-        }
-        projectRepository.delete(project);
+    public void deleteProjectByIdentifier(String projectIdentifier, String username){
+        projectRepository.delete(findProjectByIdentifier(projectIdentifier, username));
     }
 }
