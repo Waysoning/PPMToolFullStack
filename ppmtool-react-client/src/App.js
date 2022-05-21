@@ -15,6 +15,26 @@ import AddProjectTask from './components/ProjectBoard/ProjectTasks/AddProjectTas
 import UpdateProjectTask from './components/ProjectBoard/ProjectTasks/UpdateProjectTask';
 import { Provider } from 'react-redux';
 import store from './store';
+import jwt_decode from 'jwt-decode';
+import setJWT from './securityUtils/setJWT';
+import { SET_CURRENT_USER } from './actions/types';
+import { logout } from './actions/securityActions';
+
+const jwtToken = localStorage.getItem('jwtToken');
+
+if (jwtToken) {
+  setJWT(jwtToken);
+  const decoded = jwt_decode(jwtToken);
+  store.dispatch({
+    type: SET_CURRENT_USER,
+    payload: decoded,
+  });
+  const currentTime = Date.now() / 1000;
+  if (decoded.exp < currentTime) {
+    store.dispatch(logout());
+    window.location.href = '/';
+  }
+}
 
 class App extends Component {
   render() {
