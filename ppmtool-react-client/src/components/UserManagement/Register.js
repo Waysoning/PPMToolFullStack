@@ -26,7 +26,7 @@ class Register extends Component {
     }
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault();
 
     const newUser = {
@@ -37,7 +37,7 @@ class Register extends Component {
     };
 
     this.props.createNewUser(newUser, this.props.history);
-  }
+  };
 
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
